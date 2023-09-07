@@ -1,5 +1,7 @@
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../db';
 
 const LogInPage = () => {
   //
@@ -7,12 +9,10 @@ const LogInPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const users = useLiveQuery(() => db.users.toArray());
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const usersStr = localStorage.getItem('users');
-
-    const users = usersStr ? JSON.parse(usersStr) : [];
 
     const found = users.find((u) => u.username === username);
 
@@ -29,7 +29,7 @@ const LogInPage = () => {
       return;
     }
 
-    const token = found.userID + found.username;
+    const token = found.userID + '-' + found.username;
 
     localStorage.setItem('token', token);
     navigate('/dashboard');

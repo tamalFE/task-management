@@ -1,34 +1,35 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
+import { db } from '../db';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 const SignUpPage = () => {
   //
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const users = useLiveQuery(() => db.users.toArray());
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const usersStr = localStorage.getItem('users');
-
-    const users = usersStr ? JSON.parse(usersStr) : [];
-
-    const userID = uuid();
-
     const newUser = {
-      userID,
       username,
       password,
       image: null,
       bio: '',
     };
 
-    users.push(newUser);
+    // Unique username
+    const userFound = users.find((u) => u.username === username);
 
-    localStorage.setItem('users', JSON.stringify(users));
+    if (userFound) {
+      alert('User exists!');
+      return;
+    }
+
+    const userId = await db.users.add(newUser);
 
     setUsername('');
     setPassword('');

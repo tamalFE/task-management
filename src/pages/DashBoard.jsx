@@ -1,9 +1,12 @@
 import ProtectedRoute from '../component/HOC/ProtectedRoute';
+import Layout from '../layout/Layout';
 
 const DashBoard = () => {
   return (
     <ProtectedRoute>
-      <h1>Hello from DashBoard</h1>
+      <Layout>
+        <h1>Hello from DashBoard</h1>
+      </Layout>
     </ProtectedRoute>
   );
 };

@@ -18,7 +18,7 @@ const ProtectedRoute = (props) => {
 
   if (!renderUI) return <p>Loading ...</p>;
 
-  return <>{props.children}</>;
+  return <div>{props.children}</div>;
 };
 
 export default ProtectedRoute;
