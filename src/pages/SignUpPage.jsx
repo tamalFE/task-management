@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { db } from '../db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
@@ -75,6 +75,7 @@ const SignUpPage = () => {
                 Signup
               </button>
             </div>
+            <NavLink to={'/login'}>Already Have an account? | Log In</NavLink>
           </form>
         </div>
       </div>

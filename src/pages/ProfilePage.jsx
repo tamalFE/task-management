@@ -1,14 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import ProtectedRoute from '../component/HOC/ProtectedRoute';
 import Layout from '../layout/Layout';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
 import { toBase64 } from '../utils/image.util';
+import { authContext } from '../contexts/auth.context';
 
 const ProfilePage = () => {
-  const [user, setUser] = useState(null);
-  // const userId = localStorage.getItem('token').split('-')[0];
-  const [userId, setUserId] = useState('');
+  const { user, setUser } = useContext(authContext);
   const users = useLiveQuery(() => db.users.toArray());
   const [bio, setBio] = useState(user?.bio ?? '');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -20,12 +19,15 @@ const ProfilePage = () => {
   const updatePassword = async (e) => {
     e.preventDefault();
 
+    if (!user) return;
+
     try {
-      if (user.password !== currentPassword) {
+      const userInfo = users.find((u) => u.userID === user?.userID);
+      if (userInfo?.password !== currentPassword) {
         alert('Invalid Current Password');
         return;
       }
-      await db.users.update(Number(userId), { password: newPassword });
+      await db.users.update(Number(user?.userID), { password: newPassword });
       setNewPassword('');
       setCurrentPassword('');
     } catch (error) {
@@ -37,7 +39,8 @@ const ProfilePage = () => {
     e.preventDefault();
 
     try {
-      await db.users.update(Number(userId), { bio });
+      if (!user) return;
+      await db.users.update(Number(user.userID), { bio });
       setBio('');
     } catch (error) {
       console.error(error);
@@ -48,7 +51,7 @@ const ProfilePage = () => {
     e.preventDefault();
 
     try {
-      await db.users.update(Number(userId), { image });
+      await db.users.update(Number(user?.userID), { image });
       setImage(null);
     } catch (error) {
       console.error(error);
@@ -60,14 +63,6 @@ const ProfilePage = () => {
     setImage(imageURI);
     setShowUpdateImage(true);
   };
-
-  useEffect(() => {
-    if (!users) return;
-    const userIDStr = localStorage.getItem('token').split('-')[0];
-    setUserId(userIDStr);
-    const userInfo = users.find((u) => u.userID === Number(userId));
-    setUser(userInfo);
-  }, [users]);
 
   return (
     <ProtectedRoute>

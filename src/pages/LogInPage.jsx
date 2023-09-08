@@ -1,13 +1,15 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { db } from '../db';
+import { authContext } from '../contexts/auth.context';
 
 const LogInPage = () => {
   //
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useContext(authContext);
 
   const users = useLiveQuery(() => db.users.toArray());
 
@@ -30,6 +32,9 @@ const LogInPage = () => {
     }
 
     const token = found.userID + '-' + found.username;
+    const userInfo = { ...found };
+    delete userInfo.password;
+    setUser(userInfo);
 
     localStorage.setItem('token', token);
     navigate('/dashboard');
@@ -72,6 +77,7 @@ const LogInPage = () => {
                 Login
               </button>
             </div>
+            <NavLink to={'/signup'}>Don't Have an account? | Sign Up</NavLink>
           </form>
         </div>
       </div>
