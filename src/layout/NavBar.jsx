@@ -40,7 +40,7 @@ const NavBar = () => {
                 </NavLink>
               </li>
               <li>
-                <a>Settings</a>
+                <NavLink to="/tasks">Tasks</NavLink>
               </li>
               <li>
                 <a onClick={logout}>Logout</a>

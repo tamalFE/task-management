@@ -5,6 +5,8 @@ import SignUpPage from './pages/SignupPage';
 import DashBoard from './pages/DashBoard';
 import ProfilePage from './pages/ProfilePage';
 import { AuthProvider } from './contexts/auth.context';
+import Tasks from './pages/Tasks';
+import CreateTask from './pages/CreateTask';
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/tasks/create" element={<CreateTask />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
