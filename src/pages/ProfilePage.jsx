@@ -7,7 +7,8 @@ import { toBase64 } from '../utils/image.util';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-  const userId = localStorage.getItem('token').split('-')[0];
+  // const userId = localStorage.getItem('token').split('-')[0];
+  const [userId, setUserId] = useState('');
   const users = useLiveQuery(() => db.users.toArray());
   const [bio, setBio] = useState(user?.bio ?? '');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -62,6 +63,8 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (!users) return;
+    const userIDStr = localStorage.getItem('token').split('-')[0];
+    setUserId(userIDStr);
     const userInfo = users.find((u) => u.userID === Number(userId));
     setUser(userInfo);
   }, [users]);

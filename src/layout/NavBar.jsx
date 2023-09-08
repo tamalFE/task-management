@@ -16,15 +16,18 @@ const NavBar = () => {
   };
 
   useEffect(() => {
+    if (!Array.isArray(users)) return;
     const userInfo = users.find((u) => u.userID === Number(userId));
-    setAvatar(userInfo.image);
+    setAvatar(userInfo?.image);
   }, [users]);
 
   return (
     <div>
       <div className="navbar bg-base-100 shadow-lg">
         <div className="flex-1">
-          <a className="btn btn-ghost normal-case text-xl">Task Manager</a>
+          <NavLink to={'/'} className="btn btn-ghost normal-case text-xl">
+            Task Manager
+          </NavLink>
         </div>
         <div className="flex-none gap-2">
           <div className="dropdown dropdown-end">
@@ -40,7 +43,6 @@ const NavBar = () => {
               <li>
                 <NavLink to={'/profile'} className="justify-between">
                   Profile
-                  <span className="badge">New</span>
                 </NavLink>
               </li>
               <li>
