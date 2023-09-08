@@ -1,6 +1,12 @@
+import { useLiveQuery } from 'dexie-react-hooks';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { db } from '../db';
+import { useEffect, useState } from 'react';
 
 const NavBar = () => {
+  const [avatar, setAvatar] = useState('/profile.jpg');
+  const userId = localStorage.getItem('token').split('-')[0];
+  const users = useLiveQuery(() => db.users.toArray());
   const navigate = useNavigate();
 
   const logout = () => {
@@ -9,6 +15,11 @@ const NavBar = () => {
     navigate('/login');
   };
 
+  useEffect(() => {
+    const userInfo = users.find((u) => u.userID === Number(userId));
+    setAvatar(userInfo.image);
+  }, [users]);
+
   return (
     <div>
       <div className="navbar bg-base-100 shadow-lg">
@@ -16,17 +27,10 @@ const NavBar = () => {
           <a className="btn btn-ghost normal-case text-xl">Task Manager</a>
         </div>
         <div className="flex-none gap-2">
-          {/* <div className="form-control">
-            <input
-              type="text"
-              placeholder="Search"
-              className="input input-bordered w-24 md:w-auto"
-            />
-          </div> */}
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img src="/profile.jpg" />
+                <img src={avatar ?? '/profile.jpg'} />
               </div>
             </label>
             <ul

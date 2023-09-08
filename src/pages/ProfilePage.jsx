@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ProtectedRoute from '../component/HOC/ProtectedRoute';
 import Layout from '../layout/Layout';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
+import { toBase64 } from '../utils/image.util';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -11,6 +12,9 @@ const ProfilePage = () => {
   const [bio, setBio] = useState(user?.bio ?? '');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [image, setImage] = useState(null);
+  const [showUpdateImage, setShowUpdateImage] = useState(false);
+  const fileRef = useRef(null);
 
   const updatePassword = async (e) => {
     e.preventDefault();
@@ -39,96 +43,129 @@ const ProfilePage = () => {
     }
   };
 
+  const updateImage = async (e) => {
+    e.preventDefault();
+
+    try {
+      await db.users.update(Number(userId), { image });
+      setImage(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onImageChange = async (e) => {
+    const imageURI = await toBase64(e.target.files[0]);
+    setImage(imageURI);
+    setShowUpdateImage(true);
+  };
+
   useEffect(() => {
     if (!users) return;
     const userInfo = users.find((u) => u.userID === Number(userId));
-    console.log({ userInfo });
     setUser(userInfo);
   }, [users]);
 
   return (
-    <div>
-      <ProtectedRoute>
-        <Layout>
-          <div className="w-full h-screen flex justify-center items-center">
-            <div className="card w-3/4 bg-base-100 shadow-xl">
-              <div className="card-body flex">
-                <div className="avatar self-center">
-                  <div className="w-24 rounded-full">
-                    <img src={user?.image ?? '/profile.jpg'} />
-                  </div>
+    <ProtectedRoute>
+      <Layout>
+        <div className="w-full h-screen flex justify-center items-center">
+          <div className="card w-3/4 bg-base-100 shadow-xl">
+            <div className="card-body flex">
+              <div className="avatar self-center">
+                <div className="w-24 rounded-full">
+                  <img src={user?.image ?? '/profile.jpg'} />
                 </div>
-                <h2 className="card-title self-center">
-                  {user?.username ?? ''}
-                </h2>
-                <p className="self-center">{user?.bio ?? ''}</p>
+              </div>
+              <form className="self-center" onSubmit={updateImage}>
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={() => fileRef?.current?.click()}
+                >
+                  upload Image
+                </button>
+                {showUpdateImage && (
+                  <button className="btn ml-2" type="submit">
+                    Update Image
+                  </button>
+                )}
+                <input
+                  ref={fileRef}
+                  accept="image/*"
+                  type="file"
+                  style={{ display: 'none' }}
+                  onChange={onImageChange}
+                />
+              </form>
+              <h2 className="card-title self-center">{user?.username ?? ''}</h2>
+              <p className="self-center">{user?.bio ?? ''}</p>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="card w-96 bg-base-100 shadow-xl flex-1">
+                <div className="card-body">
+                  <form onSubmit={updateBio}>
+                    <h2 className="card-title">Update Information</h2>
+                    <div className="form-control my-2">
+                      <label className="label">
+                        <span className="label-text">Your Bio</span>
+                      </label>
+                      <textarea
+                        className="textarea textarea-bordered h-24"
+                        placeholder="Update your Bio"
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                      ></textarea>
+                    </div>
+                    <div className="card-actions justify-end">
+                      <button className="btn btn-primary" type="submit">
+                        Update
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className="card w-96 bg-base-100 shadow-xl flex-1">
-                  <div className="card-body">
-                    <form onSubmit={updateBio}>
-                      <h2 className="card-title">Update Information</h2>
-                      <div className="form-control my-2">
-                        <label className="label">
-                          <span className="label-text">Your Bio</span>
-                        </label>
-                        <textarea
-                          className="textarea textarea-bordered h-24"
-                          placeholder="Update your Bio"
-                          value={bio}
-                          onChange={(e) => setBio(e.target.value)}
-                        ></textarea>
-                      </div>
-                      <div className="card-actions justify-end">
-                        <button className="btn btn-primary" type="submit">
-                          Update
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-
-                <div className="card w-96 bg-base-100 shadow-xl flex-1">
-                  <div className="card-body">
-                    <h2 className="card-title">Update Password</h2>
-                    <form onSubmit={updatePassword}>
-                      <div className="form-control w-full my-2">
-                        <label className="label">
-                          <span className="label-text">Current Password</span>
-                        </label>
-                        <input
-                          type="password"
-                          className="input input-bordered w-full"
-                          value={currentPassword}
-                          onChange={(e) => setCurrentPassword(e.target.value)}
-                        />
-                      </div>
-                      <div className="form-control w-full my-2">
-                        <label className="label">
-                          <span className="label-text">New Password</span>
-                        </label>
-                        <input
-                          type="password"
-                          className="input input-bordered w-full"
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                      </div>
-                      <div className="card-actions justify-end">
-                        <button className="btn btn-primary" type="submit">
-                          Update
-                        </button>
-                      </div>
-                    </form>
-                  </div>
+              <div className="card w-96 bg-base-100 shadow-xl flex-1">
+                <div className="card-body">
+                  <h2 className="card-title">Update Password</h2>
+                  <form onSubmit={updatePassword}>
+                    <div className="form-control w-full my-2">
+                      <label className="label">
+                        <span className="label-text">Current Password</span>
+                      </label>
+                      <input
+                        type="password"
+                        className="input input-bordered w-full"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-control w-full my-2">
+                      <label className="label">
+                        <span className="label-text">New Password</span>
+                      </label>
+                      <input
+                        type="password"
+                        className="input input-bordered w-full"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                    </div>
+                    <div className="card-actions justify-end">
+                      <button className="btn btn-primary" type="submit">
+                        Update
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
-        </Layout>
-      </ProtectedRoute>
-    </div>
+        </div>
+      </Layout>
+    </ProtectedRoute>
   );
 };
 
