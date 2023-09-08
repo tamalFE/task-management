@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LogInPage from './pages/LogInPage';
-import SignUpPage from './pages/SignupPage';
+import SignUpPage from './pages/SignUpPage';
 import DashBoard from './pages/DashBoard';
 import ProfilePage from './pages/ProfilePage';
 import { AuthProvider } from './contexts/auth.context';
