@@ -67,7 +67,7 @@ const ProfilePage = () => {
   return (
     <ProtectedRoute>
       <Layout>
-        <div className="w-full h-screen flex justify-center items-center">
+        <div className="w-full h-screen flex justify-center items-center my-5">
           <div className="card w-3/4 bg-base-100 shadow-xl">
             <div className="card-body flex">
               <div className="avatar self-center">
