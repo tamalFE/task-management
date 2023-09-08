@@ -31,6 +31,9 @@ const SignUpPage = () => {
 
     const userId = await db.users.add(newUser);
 
+    console.log(newUser);
+    console.log(userId);
+
     setUsername('');
     setPassword('');
 
