@@ -3,6 +3,7 @@ import Layout from '../layout/Layout';
 
 const HomePage = () => {
   const navigate = useNavigate();
+
   return (
     <Layout>
       <div>
@@ -25,7 +26,7 @@ const HomePage = () => {
               </p>
               <button
                 className="btn btn-primary"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/signup')}
               >
                 Get Started
               </button>

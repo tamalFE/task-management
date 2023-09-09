@@ -2,7 +2,6 @@ import { useState } from 'react';
 import ProtectedRoute from '../component/HOC/ProtectedRoute';
 import Layout from '../layout/Layout';
 import { db } from '../db';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useNavigate } from 'react-router-dom';
 
 const CreateTask = () => {

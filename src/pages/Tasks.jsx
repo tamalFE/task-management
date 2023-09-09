@@ -45,6 +45,7 @@ const Tasks = () => {
                   <th>Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {/* row 1 */}
                 {Array.isArray(tasks) &&

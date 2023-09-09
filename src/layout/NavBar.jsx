@@ -1,11 +1,8 @@
-import { useLiveQuery } from 'dexie-react-hooks';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { db } from '../db';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { authContext } from '../contexts/auth.context';
 
 const NavBar = () => {
-  const users = useLiveQuery(() => db.users.toArray());
   const navigate = useNavigate();
   const { user } = useContext(authContext);
 

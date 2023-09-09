@@ -7,7 +7,6 @@ const SignUpPage = () => {
   //
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
   const users = useLiveQuery(() => db.users.toArray());
   const navigate = useNavigate();
 
@@ -30,9 +29,6 @@ const SignUpPage = () => {
     }
 
     const userId = await db.users.add(newUser);
-
-    console.log(newUser);
-    console.log(userId);
 
     setUsername('');
     setPassword('');
