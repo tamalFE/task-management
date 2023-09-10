@@ -7,6 +7,7 @@ import ProfilePage from './pages/ProfilePage';
 import { AuthProvider } from './contexts/auth.context';
 import Tasks from './pages/Tasks';
 import CreateTask from './pages/CreateTask';
+import Teams from './pages/Teams';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/tasks/create" element={<CreateTask />} />
+          <Route path="/teams" element={<Teams />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

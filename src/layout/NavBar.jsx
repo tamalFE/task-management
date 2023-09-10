@@ -21,6 +21,14 @@ const NavBar = () => {
           </NavLink>
         </div>
         <div className="flex-none gap-2">
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <NavLink to="/tasks">Tasks</NavLink>
+            </li>
+            <li>
+              <NavLink to="/teams">Teams</NavLink>
+            </li>
+          </ul>
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
@@ -38,6 +46,9 @@ const NavBar = () => {
               </li>
               <li>
                 <NavLink to="/tasks">Tasks</NavLink>
+              </li>
+              <li>
+                <NavLink to="/teams">Teams</NavLink>
               </li>
               <li>
                 <a onClick={logout}>Logout</a>
