@@ -12,40 +12,61 @@ const Teams = () => {
     <div>
       <ProtectedRoute>
         <Layout>
-          <div>
+          <div className="p-3">
+            <div className="w-full flex">
+              <h2 className="text-xl my-2">Teams</h2>
+              <button
+                className="btn ml-auto btn-accent"
+                type="button"
+                onClick={() => navigate('/teams/create')}
+              >
+                Add Team
+              </button>
+            </div>
             <div className="overflow-x-auto">
               <table className="table">
                 {/* head */}
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Member Name</th>
-                    <th>Task Name</th>
-                    <th>Status</th>
+                    <th>Team Name</th>
+                    <th>Team Type</th>
+                    <th>Members</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* row */}
-                  <tr>
-                    <th>1</th>
-                    <td>
-                      <div className="flex items-center space-x-3">
-                        <div>
-                          <div className="font-bold">Hart Hagerty</div>
-                          <div className="text-sm opacity-50">
-                            United States
+                  {teams &&
+                    teams.map((t, i) => (
+                      <tr key={i}>
+                        <th>{i + 1}</th>
+                        <td>
+                          <div className="flex items-center space-x-3">
+                            <div>
+                              <div className="font-bold">{t.teamName}</div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Zemlak, Daniel and Leannon</td>
-                    <td>Purple</td>
-                    <th>
-                      <button className="btn btn-ghost btn-xs">Add</button>
-                      <button className="btn btn-ghost btn-xs">Remove</button>
-                    </th>
-                  </tr>
+                        </td>
+                        <td>{t.type}</td>
+                        <td>{t.members.length}</td>
+                        <th>
+                          <button
+                            className="btn btn-ghost btn-xs"
+                            onClick={() => {
+                              navigate('/teams/members/add', {
+                                state: t.teamID,
+                              });
+                            }}
+                          >
+                            Add Members
+                          </button>
+                          <button className="btn btn-ghost btn-xs">Edit</button>
+                          <button className="btn btn-ghost btn-xs">
+                            Remove
+                          </button>
+                        </th>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

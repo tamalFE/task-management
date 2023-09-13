@@ -8,6 +8,8 @@ import { AuthProvider } from './contexts/auth.context';
 import Tasks from './pages/Tasks';
 import CreateTask from './pages/CreateTask';
 import Teams from './pages/Teams';
+import CreateTeam from './pages/CreateTeam';
+import TeamAddMember from './pages/TeamAddMember';
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/tasks/create" element={<CreateTask />} />
           <Route path="/teams" element={<Teams />} />
+          <Route path="/teams/create" element={<CreateTeam />} />
+          <Route path="/teams/members/add" element={<TeamAddMember />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

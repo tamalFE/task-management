@@ -52,6 +52,7 @@ const SignUpPage = () => {
                 className="input input-bordered w-full max-w-xs"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required
               />
             </div>
             <div className="form-control w-full max-w-xs">
@@ -64,6 +65,7 @@ const SignUpPage = () => {
                 className="input input-bordered w-full max-w-xs"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <div className="card-actions justify-end mt-2">
