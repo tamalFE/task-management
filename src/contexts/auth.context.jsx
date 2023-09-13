@@ -1,20 +1,19 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { createContext, useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+
 import { db } from '../db';
 
 export const authContext = createContext();
 
 export const AuthProvider = (props) => {
   const [user, setUser] = useState(null);
-  // const navigate = useNavigate();
+
   const users = useLiveQuery(() => db.users.toArray());
 
   useEffect(() => {
     const getUser = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        // navigate('/login');
         return;
       }
       const id = Number(token.split('-')[0]);
